@@ -1,4 +1,4 @@
-#include "strassen.hpp"
+﻿#include "strassen.hpp"
 #include <iostream>
 
 
@@ -70,36 +70,36 @@ int main(int argc, char* argcv[]) {
 		std::string argValue = argcv[1];
 		allowed_commands command = commandToEnum(argValue);
 		switch (command) {
-			case help:
-				printHelp(std::cout);
-				break;
-			case files:
-				//v tomto pripade musi byt delka argc=4
-				if (argc != 4) {
-					printMatrixParametersMissing(std::cout, files);
-				}
-				else {
+		case help:
+			printHelp(std::cout);
+			break;
+		case files:
+			//v tomto pripade musi byt delka argc=4
+			if (argc != 4) {
+				printMatrixParametersMissing(std::cout, files);
+			}
+			else {
 
-				}
-				break;
-			case direct:
-				//v tomto pripade musi byt delka argc=4
-				if (argc != 4) {
-					printMatrixParametersMissing(std::cout, direct);
-				}
-				else {
+			}
+			break;
+		case direct:
+			//v tomto pripade musi byt delka argc=4
+			if (argc != 4) {
+				printMatrixParametersMissing(std::cout, direct);
+			}
+			else {
 
-				}
-				break;
-			case version:
-				printVersion(std::cout);
-				break;
-			case author:
-				printAuthor(std::cout);
-				break;
-			default:
-				std::cerr << "Unknown argument." << std::endl;
-				return 1;
+			}
+			break;
+		case version:
+			printVersion(std::cout);
+			break;
+		case author:
+			printAuthor(std::cout);
+			break;
+		default:
+			std::cerr << "Unknown argument." << std::endl;
+			return 1;
 		}
 		return 0;
 	}
