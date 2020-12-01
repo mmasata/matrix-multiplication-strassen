@@ -2,6 +2,7 @@
 #include <iostream>
 #include <exception>
 #include <string>
+#include <math.h>
 
 
 
@@ -71,6 +72,13 @@ void printMatrixParametersMissing(std::ostream& os, allowed_commands command) {
 	os << "Matrix multiplication type: " << ((command == 0) ? "--files" : "--direct") << " have not enough additional arguments." << std::endl;
 }
 
+/*
+	Metoda, ktera ulozi vyslednou matici do ciloveho souboru
+*/
+void saveMatrixToFile(std::string filePath, matrix* matrix) {
+	//TODO
+}
+
 
 /*
 	Bude cekat na vystupni data, dokud nebude matice naplnena.
@@ -86,9 +94,16 @@ matrix* parseDirectData(std::string arg, std::ostream& os) {
 				break;
 			}
 			if (y == (arg.length() - 1)) {
-				throw std::exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format.");
+				throw std::exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format. 1");
 			}
 		}
+
+
+		if (rows != columns || !((rows != 0) && ((rows & (rows - 1)) == 0))) {
+			//neresime tyto matice, budto neni ctvercova, nebo to neni mocnina 2
+			throw std::exception("Program solve only matrix with same size rows and columns and row/column number is powe of 2.");
+		}
+
 		//zinicializujeme dvoudimenzionalni pole
 		int** data = new int* [rows];
 		for (int i = 0; i < rows; ++i) {
@@ -128,7 +143,7 @@ matrix* parseDirectData(std::string arg, std::ostream& os) {
 		return new matrix(rows, columns, data);
 	}
 	catch (std::exception ex) {
-		throw std::exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format.");
+		throw std::exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format. 2");
 	}
 }
 
@@ -157,6 +172,10 @@ int main(int argc, char* argcv[]) {
 					matrix* left = new  matrix(argcv[2]);
 					matrix* right = new  matrix(argcv[3]);
 					matrix* result = multiplyMatrix(left, right);
+					if (argc > 4) {
+						//je tu posledni, optional parameter, a to cilovy soubor, kam vyslednou matici ulozime
+						saveMatrixToFile(argv[4], result);
+					}
 					std::cout << result;
 					//uvolnime z pameti
 					delete left;
@@ -175,6 +194,10 @@ int main(int argc, char* argcv[]) {
 					matrix* left = parseDirectData(argcv[2], std::cout);
 					matrix* right = parseDirectData(argcv[3], std::cout);
 					matrix* result = multiplyMatrix(left, right);
+					if (argc > 4) {
+						//je tu posledni, optional parameter, a to cilovy soubor, kam vyslednou matici ulozime
+						saveMatrixToFile(argv[4], result);
+					}
 					std::cout << result;
 					//uvolnime z pameti
 					delete left;

@@ -14,6 +14,6 @@ class matrix {
 		matrix(int rows, int columns);
 		~matrix();
 	private:
-		void initDataFromFile();
+		void initDataFromFile(std::fstream& file);
 };
 std::ostream& operator<<(std::ostream& os, matrix* mat);
