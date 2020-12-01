@@ -1,9 +1,13 @@
 ﻿#include "strassen.hpp"
 #include <iostream>
+#include <exception>
+#include <string>
 
 
 
-
+/*
+	Enum trida dostupnych prikazu.
+*/
 enum allowed_commands {
 	files,
 	direct,
@@ -13,6 +17,9 @@ enum allowed_commands {
 	unknown
 };
 
+/*
+	Misto stringu se nam vrati enum type, abychom mohli pracovat nasledne se switchem.
+*/
 allowed_commands commandToEnum(std::string const& stringValue) {
 	if (stringValue == "--files") return allowed_commands::files;
 	if (stringValue == "--direct") return allowed_commands::direct;
@@ -43,7 +50,7 @@ void printHelp(std::ostream& os) {
 }
 
 /*
-	Vrati autora tohoto semestralniho projektu
+	Vrati autora tohoto semestralniho projektu.
 */
 void printAuthor(std::ostream& os) {
 	os << "Author: Martin Masata" << std::endl;
@@ -51,60 +58,149 @@ void printAuthor(std::ostream& os) {
 }
 
 /*
-	Vrati verzi programu
+	Vrati verzi programu.
 */
 void printVersion(std::ostream& os) {
 	os << "Current version is " << "1.0.0" << std::endl;
 }
 
+/*
+	V pripade pocitani matice vyhodi chybu, protoze chybi argumenty.
+*/
 void printMatrixParametersMissing(std::ostream& os, allowed_commands command) {
-
+	os << "Matrix multiplication type: " << ((command == 0) ? "--files" : "--direct") << " have not enough additional arguments." << std::endl;
 }
 
 
+/*
+	Bude cekat na vystupni data, dokud nebude matice naplnena.
+*/
+matrix* parseDirectData(std::string arg, std::ostream& os) {
+	try {
+		int rows = 0;
+		int columns = 0;
+		for (int y = 0; y < arg.length(); y++) {
+			if (arg[y] == 'x' && y != arg.length()-1) {
+				rows = std::stoi(arg.substr(0, y));
+				columns = std::stoi(arg.substr(y+1, arg.length()-y));
+				break;
+			}
+			if (y == (arg.length() - 1)) {
+				throw std::exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format.");
+			}
+		}
+		//zinicializujeme dvoudimenzionalni pole
+		int** data = new int* [rows];
+		for (int i = 0; i < rows; ++i) {
+			data[i] = new int[columns];
+		}
+
+		//procteme data
+		os << "Enter matrix of format: " << rows << "x" << columns << std::endl;
+		std::string oneLine;
+		int rowsCnt = 0;
+		while (std::getline(std::cin, oneLine)) {
+			int columnsCnt = 0;
+
+			int lastDelimiter = 0;
+			for (int z = 0; z < oneLine.length(); z++) {
+				if (oneLine[z] == ' ') {
+					int currentValue = std::stoi(oneLine.substr(lastDelimiter, z-lastDelimiter));
+					data[rowsCnt][columnsCnt] = currentValue;
+					lastDelimiter = z + 1;
+					if (columnsCnt == (columns - 1)) {
+						break;
+					}
+					columnsCnt++;
+				}
+				else if (oneLine.length() - 1 == z) {
+					int currentValue = std::stoi(oneLine.substr(lastDelimiter, oneLine.length() - lastDelimiter));
+					data[rowsCnt][columnsCnt] = currentValue;
+				}
+			}
+
+			if (rowsCnt == (rows - 1)) {
+				break;
+			}
+			rowsCnt++;
+		}
+		os << "Matrix completed.\n" << std::endl;
+		return new matrix(rows, columns, data);
+	}
+	catch (std::exception ex) {
+		throw std::exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format.");
+	}
+}
+
+/*
+	Hlavni funkce nasobice matic.
+*/
 int main(int argc, char* argcv[]) {
-
-	//musi obsahovat vice jak jeden argument, jinak ukoncujeme
-	if (argc > 1) {
-		//vratime help informace a ukoncime
-		std::string argValue = argcv[1];
-		allowed_commands command = commandToEnum(argValue);
-		switch (command) {
-		case help:
-			printHelp(std::cout);
-			break;
-		case files:
-			//v tomto pripade musi byt delka argc=4
-			if (argc != 4) {
-				printMatrixParametersMissing(std::cout, files);
+	try {
+		//musi obsahovat vice jak jeden argument, jinak ukoncujeme
+		if (argc > 1) {
+			//vratime help informace a ukoncime
+			std::string argValue = argcv[1];
+			allowed_commands command = commandToEnum(argValue);
+			switch (command) {
+			case help:
+				printHelp(std::cout);
+				break;
+			case files:
+				//v tomto pripade musi byt delka argc=4
+				if (argc != 4) {
+					printMatrixParametersMissing(std::cout, files);
+					return 1;
+				}
+				else {
+					//zalozime left a right matici a predame strassenovi
+					matrix* left = new  matrix(argcv[2]);
+					matrix* right = new  matrix(argcv[3]);
+					matrix* result = multiplyMatrix(left, right);
+					std::cout << result;
+					//uvolnime z pameti
+					delete left;
+					delete right;
+					delete result;
+				}
+				break;
+			case direct:
+				//v tomto pripade musi byt delka argc=4
+				if (argc != 4) {
+					printMatrixParametersMissing(std::cout, direct);
+					return 1;
+				}
+				else {
+					//v direct pripade, musi nyni nechat uzivatele zapsat rucne matice, dle velikosti co si zvolil
+					matrix* left = parseDirectData(argcv[2], std::cout);
+					matrix* right = parseDirectData(argcv[3], std::cout);
+					matrix* result = multiplyMatrix(left, right);
+					std::cout << result;
+					//uvolnime z pameti
+					delete left;
+					delete right;
+					delete result;
+				}
+				break;
+			case version:
+				printVersion(std::cout);
+				break;
+			case author:
+				printAuthor(std::cout);
+				break;
+			default:
+				std::cerr << "Unknown argument." << std::endl;
+				return 1;
 			}
-			else {
-
-			}
-			break;
-		case direct:
-			//v tomto pripade musi byt delka argc=4
-			if (argc != 4) {
-				printMatrixParametersMissing(std::cout, direct);
-			}
-			else {
-
-			}
-			break;
-		case version:
-			printVersion(std::cout);
-			break;
-		case author:
-			printAuthor(std::cout);
-			break;
-		default:
-			std::cerr << "Unknown argument." << std::endl;
+			return 0;
+		}
+		else {
+			std::cerr << "There is not argument." << std::endl;
 			return 1;
 		}
-		return 0;
 	}
-	else {
-		std::cerr << "There is not argument." << std::endl;
+	catch (std::exception ex) {
+		std::cerr << ex.what() << std::endl;
 		return 1;
 	}
 }

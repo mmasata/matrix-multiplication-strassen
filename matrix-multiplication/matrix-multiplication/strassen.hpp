@@ -1,8 +1,10 @@
-﻿// matrix-multiplication.h : Include file for standard system include files,
-// or project specific include files.
-
-#pragma once
-
+﻿#pragma once
+#include<string>
 #include <iostream>
+#include "matrix.hpp"
 
-// TODO: Reference additional headers your program requires here.
+
+matrix* multiplyMatrix(matrix* left, matrix* right);
+bool validateColumnsAndRowsSize(matrix* left, matrix* right);
+matrix* doStrassen(matrix* left, matrix* right, int size);
+
