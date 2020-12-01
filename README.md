@@ -27,14 +27,14 @@ Vrátí jméno a email autora.
 
 Vratí verzi aplikace.
 
-**--direct** _[NUMBER]x[NUMBER] [NUMBER]x[NUMBER]_
+**--direct** _[NUMBER]x[NUMBER] [NUMBER]x[NUMBER] [OPTIONAL_DESTINATION_PATH]_
 
 Nastavení zadávání dat z konzole.
 _Příklad: --direct 4x4 4x4_
-Poté bude uživatel zadávat data ručně.
+Poté bude uživatel zadávat data ručně. Obsahuje ještě třetí, optional parametr, a to cílový .txt soubor, kam uložíme výslednou matici.
 
-**--files** _[PATH1] [PATH2]_
+**--files** _[PATH1] [PATH2] [OPTIONAL_DESTINATION_PATH]_ 
 
-Přijme cestu k textovému souboru, ze kterého si přečte data matice.
+Přijme cestu k textovému souboru, ze kterého si přečte data matice. Obsahuje ještě třetí, optional parametr, a to cílový .txt soubor, kam uložíme výslednou matici.
 
 # Časy při single thread
