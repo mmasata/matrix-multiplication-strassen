@@ -101,3 +101,5 @@ A ověřoval jejich správnost v https://matrixcalc.org/
     - 51000ms - 55000ms
 
 Při ještě větších maticích tedy 512,1024,... se bude výpočetní doba pohybovat okolo několika minut, až desítky minut.
+
+_Pozn.: Testy byli dělány skrze --file přístup k datům, --direct by zpomalovalo ruční vkládání uživatele a proto by byl čas zavádějící a nepřesný._
