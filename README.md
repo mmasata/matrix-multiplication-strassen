@@ -13,6 +13,24 @@ Přijímá vstupy přímo z příkazové řádky, nebo je zde možnost vložit p
 
 ČÍSLO[MEZERA]ČÍSLO[KONEC ŘÁDKU]
 
+# Popis zadání
+Naimplementovat program pro násobení matic pomocí Strassenova algoritmu. Výsledný program bude umět přijímat data z příkazové řádky či souboru.
+Program bude podporovat pouze čtvercové matice o velikosti libovolné mocniny na druhou. 
+
+# Popis implementace
+Nejprve jsem začal s _main.cpp_, kde jsem si nadefinoval switch pro přijímání argumentů z příkazové řádky.
+Pokud přijde jakýkoliv jiný argument, než uvedený, pak háže chybu.
+
+Poté jsem začal implementovat matici jako takovou, věděl jsem, že to budu ukládat v dvoudimenzionálním poli, ale ten jsem uložil dovnitř třídy _matrix_, kterou jsem si nadefinoval. Ta třída kromě dat obsahuje i řádky, sloupce, přetěžuje _operator<<_ pro příjemnější vypisování do konzole, a hlavně v destruktoru řeší mazání dvoudimenzionálního pole.
+
+K matrix třídě jsem přidělal _add()_ a _substract()_ operaci k maticím, protože jsem věděl, že je u Strassena budu potřebat.
+
+Poté jsem již začal se samotnou implementací Strassena. Toho jsem dělal rekurzivně, kde jsem vždy vytvořil podmatici o velikosti řádků a sloupců poloviny té předchozí.
+
+Na závěr uvolním třídy matic, co již nejsou potřeba, destruktor matrixu se postará o uvolnění polí.
+
+Poté jsem ještě doimplementoval možnost přijímat data ze souboru, kde jsem použil stejný princip jak u příkazové řádky, jen jsem to četl skrze _fstream_ ze souboru.
+
 # Příkazy
 
 **--help** 
@@ -36,5 +54,10 @@ Poté bude uživatel zadávat data ručně. Obsahuje ještě třetí, optional p
 **--files** _[PATH1] [PATH2] [OPTIONAL_DESTINATION_PATH]_ 
 
 Přijme cestu k textovému souboru, ze kterého si přečte data matice. Obsahuje ještě třetí, optional parametr, a to cílový .txt soubor, kam uložíme výslednou matici.
+
+# Examples
+V složce examples naleznete _exampleCommands.txt_, kde jsou vzorové příkazy. V složce se také nachází textové soubory _matrix-NUMBER-COUNT.txt_,
+jedná se o vstupní data pro naši aplikaci, kde _NUMBER_ definuje počet řádků a sloupců matice.
+_Příklad: matrix-16-1.txt, matrix-16.2.txt, ..._
 
 # Časy při single thread
