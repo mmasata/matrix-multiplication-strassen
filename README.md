@@ -15,7 +15,7 @@ Přijímá vstupy přímo z příkazové řádky, nebo je zde možnost vložit p
 
 # Popis zadání
 Naimplementovat program pro násobení matic pomocí Strassenova algoritmu. Výsledný program bude umět přijímat data z příkazové řádky či souboru.
-Program bude podporovat pouze čtvercové matice o velikosti libovolné mocniny na druhou. 
+Program bude podporovat pouze čtvercové matice o velikosti libovolné mocniny na druhou. Implementujeme pouze celá _int _čísla.
 
 # Popis implementace
 Nejprve jsem začal s _main.cpp_, kde jsem si nadefinoval switch pro přijímání argumentů z příkazové řádky.
@@ -61,3 +61,43 @@ jedná se o vstupní data pro naši aplikaci, kde _NUMBER_ definuje počet řád
 _Příklad: matrix-16-1.txt, matrix-16.2.txt, ..._
 
 # Časy při single thread
+
+Náhodné matice jsem tvořil přes nástroj https://onlinemathtools.com/generate-random-matrix
+
+A ověřoval jejich správnost v https://matrixcalc.org/
+
+čísla generována uvnitř matice jsou čísla v rozmezí 0-1000.
+
+- Matice o velikosti 2x2
+
+    - 5ms-6ms
+
+- Matice o velikosti 4x4
+
+    - 8ms-9ms
+
+- Matice o velikosti 8x8
+
+    - 17ms-20ms
+    
+- Matice o velikosti 16x16
+
+    - 65ms-75ms
+
+- Matice o velikosti 32x32
+
+    - 270ms-320ms
+
+- Matice o velikosti 64x64
+
+    - 1550ms-1650ms
+
+- Matice o velikosti 128x128
+
+    -  8000ms-9000ms
+
+- Matice o velikosti 256x256
+
+    - 51000ms - 55000ms
+
+Při ještě větších maticích tedy 512,1024,... se bude výpočetní doba pohybovat okolo několika minut, až desítky minut.
