@@ -4,8 +4,14 @@
 #include <string>
 #include <math.h>
 #include <fstream>
+#include <chrono>
 
 
+
+template <typename TimePoint>
+std::chrono::milliseconds to_ms(TimePoint tp) {
+	return std::chrono::duration_cast<std::chrono::milliseconds>(tp);
+}
 
 /*
 	Enum trida dostupnych prikazu.
@@ -167,6 +173,7 @@ matrix* parseDirectData(std::string arg, std::ostream& os) {
 */
 int main(int argc, char* argcv[]) {
 	try {
+		auto start = std::chrono::high_resolution_clock::now();
 		//musi obsahovat vice jak jeden argument, jinak ukoncujeme
 		if (argc > 1) {
 			//vratime help informace a ukoncime
@@ -230,6 +237,8 @@ int main(int argc, char* argcv[]) {
 				std::cerr << "Unknown argument." << std::endl;
 				return 1;
 			}
+			auto end = std::chrono::high_resolution_clock::now();
+			std::cout << "Needed " << to_ms(end - start).count() << " ms to finish.\n";
 			return 0;
 		}
 		else {

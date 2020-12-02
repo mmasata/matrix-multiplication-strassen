@@ -101,7 +101,6 @@ void matrix::initDataFromFile(std::fstream& file)
 		}
 		file.close();
 	}
-	std::cout << rowNum << " " << colNum << std::endl;
 	int** arrData = new int* [rowNum];
 	for (int i = 0; i < rowNum; ++i) {
 		arrData[i] = new int[colNum];
