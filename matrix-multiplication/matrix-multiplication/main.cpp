@@ -3,6 +3,7 @@
 #include <exception>
 #include <string>
 #include <math.h>
+#include <fstream>
 
 
 
@@ -76,7 +77,21 @@ void printMatrixParametersMissing(std::ostream& os, allowed_commands command) {
 	Metoda, ktera ulozi vyslednou matici do ciloveho souboru
 */
 void saveMatrixToFile(std::string filePath, matrix* matrix) {
-	//TODO
+	std::ofstream resultFile(filePath);
+	int** data = matrix->data;
+	for (int i = 0; i < matrix->rows; i++) {
+		for (int y = 0; y < matrix->columns; y++) {
+			if (y != matrix->columns - 1) {
+				resultFile << data[i][y] << " ";
+			}
+			else {
+				resultFile << data[i][y];
+			}
+		}
+		resultFile << "\n";
+	}
+	resultFile.close();
+	std::cout << "\nMatice byla ulozena do souboru." << std::endl;
 }
 
 
@@ -163,7 +178,7 @@ int main(int argc, char* argcv[]) {
 				break;
 			case files:
 				//v tomto pripade musi byt delka argc=4
-				if (argc != 4) {
+				if (argc < 4) {
 					printMatrixParametersMissing(std::cout, files);
 					return 1;
 				}
@@ -174,7 +189,7 @@ int main(int argc, char* argcv[]) {
 					matrix* result = multiplyMatrix(left, right);
 					if (argc > 4) {
 						//je tu posledni, optional parameter, a to cilovy soubor, kam vyslednou matici ulozime
-						saveMatrixToFile(argv[4], result);
+						saveMatrixToFile(argcv[4], result);
 					}
 					std::cout << result;
 					//uvolnime z pameti
@@ -185,7 +200,7 @@ int main(int argc, char* argcv[]) {
 				break;
 			case direct:
 				//v tomto pripade musi byt delka argc=4
-				if (argc != 4) {
+				if (argc < 4) {
 					printMatrixParametersMissing(std::cout, direct);
 					return 1;
 				}
@@ -196,7 +211,7 @@ int main(int argc, char* argcv[]) {
 					matrix* result = multiplyMatrix(left, right);
 					if (argc > 4) {
 						//je tu posledni, optional parameter, a to cilovy soubor, kam vyslednou matici ulozime
-						saveMatrixToFile(argv[4], result);
+						saveMatrixToFile(argcv[4], result);
 					}
 					std::cout << result;
 					//uvolnime z pameti
