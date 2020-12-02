@@ -1,0 +1,31 @@
+matrix-multiplication.exe --help
+
+matrix-multiplication.exe --author
+
+matrix-multiplication.exe --version
+
+matrix-multiplication.exe --direct 2x2 2x2
+1 1
+1 1
+2 2
+2 2
+
+matrix-multiplication.exe --direct 4x4 4x4
+1 2 3 4
+4 5 6 7
+5 5 5 5
+2 2 2 2
+1 2 3 4
+4 5 6 7
+5 5 5 5
+2 2 2 2
+
+matrix-multiplication.exe --files test1.txt test2.txt
+
+matrix-multiplication.exe --files test1.txt test2.txt output.txt
+
+matrix-multiplication.exe --direct 2x2 2x2 output.txt
+1 1
+1 1
+2 2
+2 2
