@@ -90,14 +90,13 @@ A ověřoval jejich správnost v https://matrixcalc.org/
 
 - Matice o velikosti 64x64
 
-    - 1550ms-1650ms
+    - 800ms-850ms
 
 - Matice o velikosti 128x128
 
-    -  8000ms-9000ms
+    -  4500ms-5500ms
 
 - Matice o velikosti 256x256
 
-    - 51000ms - 55000ms
-
+    - 40000ms-42000ms
 Při ještě větších maticích tedy 512,1024,... se bude výpočetní doba pohybovat okolo několika minut, až desítky minut.

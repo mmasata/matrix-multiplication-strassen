@@ -173,7 +173,6 @@ matrix* parseDirectData(std::string arg, std::ostream& os) {
 */
 int main(int argc, char* argcv[]) {
 	try {
-		auto start = std::chrono::high_resolution_clock::now();
 		//musi obsahovat vice jak jeden argument, jinak ukoncujeme
 		if (argc > 1) {
 			//vratime help informace a ukoncime
@@ -193,12 +192,15 @@ int main(int argc, char* argcv[]) {
 					//zalozime left a right matici a predame strassenovi
 					matrix* left = new  matrix(argcv[2]);
 					matrix* right = new  matrix(argcv[3]);
+					auto start = std::chrono::high_resolution_clock::now();
 					matrix* result = multiplyMatrix(left, right);
+					auto end = std::chrono::high_resolution_clock::now();
 					if (argc > 4) {
 						//je tu posledni, optional parameter, a to cilovy soubor, kam vyslednou matici ulozime
 						saveMatrixToFile(argcv[4], result);
 					}
 					std::cout << result;
+					std::cout << "Needed " << to_ms(end - start).count() << " ms to finish.\n";
 					//uvolnime z pameti
 					delete left;
 					delete right;
@@ -215,12 +217,15 @@ int main(int argc, char* argcv[]) {
 					//v direct pripade, musi nyni nechat uzivatele zapsat rucne matice, dle velikosti co si zvolil
 					matrix* left = parseDirectData(argcv[2], std::cout);
 					matrix* right = parseDirectData(argcv[3], std::cout);
+					auto start = std::chrono::high_resolution_clock::now();
 					matrix* result = multiplyMatrix(left, right);
+					auto end = std::chrono::high_resolution_clock::now();
 					if (argc > 4) {
 						//je tu posledni, optional parameter, a to cilovy soubor, kam vyslednou matici ulozime
 						saveMatrixToFile(argcv[4], result);
 					}
 					std::cout << result;
+					std::cout << "Needed " << to_ms(end - start).count() << " ms to finish.\n";
 					//uvolnime z pameti
 					delete left;
 					delete right;
@@ -237,8 +242,6 @@ int main(int argc, char* argcv[]) {
 				std::cerr << "Unknown argument." << std::endl;
 				return 1;
 			}
-			auto end = std::chrono::high_resolution_clock::now();
-			std::cout << "Needed " << to_ms(end - start).count() << " ms to finish.\n";
 			return 0;
 		}
 		else {
