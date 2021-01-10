@@ -88,7 +88,7 @@ void matrix::initDataFromFile(std::fstream& file)
 			else {
 				if (colNum != currentCols) {
 					//error nesouhlasi pocet sloupcu
-					throw std::exception("Number of columns in this row is not same as in the previous one.");
+					throw matrix_invalid_size_exception("Number of columns in this row is not same as in the previous one.");
 				}
 			}
 			vectorData.push_back(col);
@@ -97,7 +97,7 @@ void matrix::initDataFromFile(std::fstream& file)
 		}
 		if (rowNum != colNum || !((rowNum != 0) && ((rowNum & (rowNum - 1)) == 0))) {
 			//neresime tyto matice, budto neni ctvercova, nebo to neni mocnina 2
-			throw std::exception("Program solve only matrix with same size rows and columns and row/column number is power of 2.");
+			throw matrix_invalid_size_exception("Program solve only matrix with same size rows and columns and row/column number is power of 2.");
 		}
 		file.close();
 	}

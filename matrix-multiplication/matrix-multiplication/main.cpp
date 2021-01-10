@@ -105,67 +105,62 @@ void saveMatrixToFile(std::string filePath, matrix* matrix) {
 	Bude cekat na vystupni data, dokud nebude matice naplnena.
 */
 matrix* parseDirectData(std::string arg, std::ostream& os) {
-	try {
-		int rows = 0;
-		int columns = 0;
-		for (int y = 0; y < arg.length(); y++) {
-			if (arg[y] == 'x' && y != arg.length()-1) {
-				rows = std::stoi(arg.substr(0, y));
-				columns = std::stoi(arg.substr(y+1, arg.length()-y));
-				break;
-			}
-			if (y == (arg.length() - 1)) {
-				throw std::exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format. 1");
-			}
+	int rows = 0;
+	int columns = 0;
+	for (int y = 0; y < arg.length(); y++) {
+		if (arg[y] == 'x' && y != arg.length()-1) {
+			rows = std::stoi(arg.substr(0, y));
+			columns = std::stoi(arg.substr(y+1, arg.length()-y));
+			break;
 		}
-
-
-		if (rows != columns || !((rows != 0) && ((rows & (rows - 1)) == 0))) {
-			//neresime tyto matice, budto neni ctvercova, nebo to neni mocnina 2
-			throw std::exception("Program solve only matrix with same size rows and columns and row/column number is powe of 2.");
+		if (y == (arg.length() - 1)) {
+			throw matrix_parse_exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format.");
 		}
-
-		//zinicializujeme dvoudimenzionalni pole
-		int** data = new int* [rows];
-		for (int i = 0; i < rows; ++i) {
-			data[i] = new int[columns];
-		}
-
-		//procteme data
-		os << "Enter matrix of format: " << rows << "x" << columns << std::endl;
-		std::string oneLine;
-		int rowsCnt = 0;
-		while (std::getline(std::cin, oneLine)) {
-			int columnsCnt = 0;
-
-			int lastDelimiter = 0;
-			for (int z = 0; z < oneLine.length(); z++) {
-				if (oneLine[z] == ' ') {
-					int currentValue = std::stoi(oneLine.substr(lastDelimiter, z-lastDelimiter));
-					data[rowsCnt][columnsCnt] = currentValue;
-					lastDelimiter = z + 1;
-					if (columnsCnt == (columns - 1)) {
-						break;
-					}
-					columnsCnt++;
-				}
-				else if (oneLine.length() - 1 == z) {
-					int currentValue = std::stoi(oneLine.substr(lastDelimiter, oneLine.length() - lastDelimiter));
-					data[rowsCnt][columnsCnt] = currentValue;
-				}
-			}
-
-			if (rowsCnt == (rows - 1)) {
-				break;
-			}
-			rowsCnt++;
-		}
-		os << "Matrix completed.\n" << std::endl;
-		return new matrix(rows, columns, data);
 	}
-	catch (std::exception ex) {
-		throw std::exception("Matrix cannot be created. Parse error of ROWSxCOLUMNS format. 2");
+
+
+	if (rows != columns || !((rows != 0) && ((rows & (rows - 1)) == 0))) {
+		//neresime tyto matice, budto neni ctvercova, nebo to neni mocnina 2
+		throw matrix_parse_exception("Program solve only matrix with same size rows and columns and row/column number is power of 2.");
 	}
+
+	//zinicializujeme dvoudimenzionalni pole
+	int** data = new int* [rows];
+	for (int i = 0; i < rows; ++i) {
+		data[i] = new int[columns];
+	}
+
+	//procteme data
+	os << "Enter matrix of format: " << rows << "x" << columns << std::endl;
+	std::string oneLine;
+	int rowsCnt = 0;
+	while (std::getline(std::cin, oneLine)) {
+		int columnsCnt = 0;
+
+		int lastDelimiter = 0;
+		for (int z = 0; z < oneLine.length(); z++) {
+			if (oneLine[z] == ' ') {
+				int currentValue = std::stoi(oneLine.substr(lastDelimiter, z-lastDelimiter));
+				data[rowsCnt][columnsCnt] = currentValue;
+				lastDelimiter = z + 1;
+				if (columnsCnt == (columns - 1)) {
+					break;
+				}
+				columnsCnt++;
+			}
+			else if (oneLine.length() - 1 == z) {
+				int currentValue = std::stoi(oneLine.substr(lastDelimiter, oneLine.length() - lastDelimiter));
+				data[rowsCnt][columnsCnt] = currentValue;
+			}
+		}
+
+		if (rowsCnt == (rows - 1)) {
+			break;
+		}
+		rowsCnt++;
+	}
+	os << "Matrix completed.\n" << std::endl;
+	return new matrix(rows, columns, data);
 }
 
 /*
@@ -239,17 +234,15 @@ int main(int argc, char* argcv[]) {
 				printAuthor(std::cout);
 				break;
 			default:
-				std::cerr << "Unknown argument." << std::endl;
-				return 1;
+				throw unknown_argument_exception("Unknown argument.");
 			}
 			return 0;
 		}
 		else {
-			std::cerr << "There is not argument." << std::endl;
-			return 1;
+			throw missing_argument_exception("There is not argument.");
 		}
 	}
-	catch (std::exception ex) {
+	catch (matrix_exception ex) {
 		std::cerr << ex.what() << std::endl;
 		return 1;
 	}

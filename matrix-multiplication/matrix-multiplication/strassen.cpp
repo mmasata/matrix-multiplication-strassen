@@ -1,6 +1,7 @@
 #include "strassen.hpp"
-#include <exception>
+#include <stdexcept>
 #include "matrix_operations.hpp"
+#include "matrix.hpp"
 
 /*
 	Vypocita a nasledne vrati vysledek.
@@ -11,7 +12,7 @@ matrix* multiplyMatrix(matrix* left, matrix* right) {
 		return result;
 	}
 	else {
-		throw std::exception("Columns of first matrix are not same as rows of second matrix.");
+		throw matrix_exception("Columns of first matrix are not same as rows of second matrix.");
 	}
 }
 
